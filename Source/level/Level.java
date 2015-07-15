@@ -10,6 +10,10 @@ import game.entity.Entity;
 import game.gfx.Screen;
 import level.tiles.Tile;
 
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,29 +26,78 @@ public class Level {
 	public int width;
 	public int height;
 	public List<Entity> entities = new ArrayList<Entity>();
+	protected String imagePath;
+	protected BufferedImage image;
 
-	public Level(int width, int height) {
-		tiles = new byte[width * height];
-		this.width = width;
-		this.height = height;
-		this.generateLevel();
+	public Level(String imagePath) {
+		if(imagePath != null) {
+			this.imagePath = imagePath;
+			this.loadLevelFromFile();
+		} else {
+			this.width = 64;
+			this.height = 64;
+			tiles = new byte[width * height];
+			this.generateLevel();
+		}
 	}
 
-	public void generateLevel() {
-		for (int y = 0; y < height; y++) {
-			for (int x = 0; x < width; x++) {
-				if (x * y % 10 < 5) {
-					tiles[x + y * width] = Tile.GRASS.getId();
-				} else {
-					tiles[x + y * width] = Tile.STONE.getId();
+	private void loadLevelFromFile() {
+
+		try {
+			this.image = ImageIO.read(Level.class.getResource(this.imagePath));
+			this.width = image.getWidth();
+			this.height = image.getHeight();
+			tiles = new byte[width*height];
+			this.loadTiles();
+		} catch ( IOException e ) {
+			e.printStackTrace();
+		}
+	}
+
+	private void loadTiles() {
+		int [] tileColors = this.image.getRGB(0, 0, width, height, null, 0, width);
+		for(int y=0; y<height; ++y) {
+			for(int x=0; x<width; ++x) {
+				tileCheck: for(Tile t : Tile.tiles) {
+					if(t != null && t.getLevelColor() == tileColors[x+y*width]){
+						this.tiles[x+y*width] = t.getId();
+						break tileCheck;
+					}
 				}
 			}
 		}
 	}
 
+	protected void saveLevelToFile() {
+		try {
+			ImageIO.write(image, "png", new File(Level.class.getResource(this.imagePath).getFile()));
+		} catch ( IOException e ) {
+			e.printStackTrace();
+		}
+	}
+
+	public void alterTile(int x, int y, Tile newTile) {
+		this.tiles[x+y*width] = newTile.getId();
+		image.setRGB(x, y, newTile.getLevelColor());
+	}
+
+	public void generateLevel() {
+		for (int y = 0; y < height; y++) {
+			for (int x = 0; x < width; x++) {
+				if(x*y % 10 < 7)
+					tiles[x + y * width] = Tile.GRASS.getId();
+				else
+					tiles[x + y * width] = Tile.STONE.getId();
+			}
+		}
+	}
+
 	public void tick() {
-		for(Entity e : entities) {
+		for(Entity e : entities)
 			e.tick();
+		for(Tile t : Tile.tiles) {
+			if(t != null)
+				t.tick();
 		}
 	}
 
@@ -60,8 +113,8 @@ public class Level {
 
 		screen.setOffset(xOffset, yOffset);
 
-		for (int y = (yOffset >> 3); y < (yOffset + screen.height >> 3) + 1; y++) {
-			for (int x = (xOffset >> 3); x < (xOffset + screen.width >> 3) + 1; x++) {
+		for (int y = (yOffset >> 3); y < (yOffset + screen.height >> 3) + 1; ++y) {
+			for (int x = (xOffset >> 3); x < (xOffset + screen.width >> 3) + 1; ++x) {
 				getTile(x, y).render(screen, this, x << 3, y << 3);
 			}
 		}
