@@ -16,7 +16,7 @@ public class AnimatedTile extends BasicTile{
 	protected long lastIterationTime;
 	protected int animationDelay;
 
-	public AnimatedTile(int id, int [][] animationCoordinates, int tileColor, int levelColor, int animationDelay) {
+	public AnimatedTile(int id, int [][] animationCoordinates, int[] tileColor, int levelColor, int animationDelay) {
 		super(id, animationCoordinates[0][0], animationCoordinates[0][1], tileColor, levelColor);
 		this.animationTileCoordinates = animationCoordinates;
 		this.currentAnimationIndex = 0;

@@ -18,7 +18,7 @@ import protolobe.InputHandler;
 public class Player extends Mob {
 
 	private InputHandler input;
-	private int color = Colors.get(-1, 111, 135, 543);
+	private int[] color = Colors.get(new int[] {-1, 111, Colors.FRed, Colors.MSkin, -1, -1});
 	private int scale = 1;
 
 	public Player(Level level, int x, int y, InputHandler input, String name) {
@@ -74,19 +74,19 @@ public class Player extends Mob {
 		int xOffset = x - modifier / 2;
 		int yOffset = y - modifier / 2 - 4;
 		if(isSwimming) {
-			int waterColor = 0;
+			int[] waterColor;
 			yOffset += 4;
 			if(tickCount % 60 < 15)
-				waterColor = Colors.get(-1, -1, 225, -1);
+				waterColor = Colors.get(new int[] {-1, -1, 226, -1, -1, -1});
 			else if(15 <= tickCount % 60 && tickCount % 60 < 30) {
 				--yOffset;
-				waterColor = Colors.get(-1, 225, 115, -1);
+				waterColor = Colors.get(new int[] {-1, 226, 116, -1, -1, -1});
 			}
 			else if(30 <= tickCount % 60 && tickCount % 60 < 45)
-				waterColor = Colors.get(-1, 115, -1, 225);
+				waterColor = Colors.get(new int[] {-1, 116, -1, 226, -1, -1});
 			else {
 				--yOffset;
-				waterColor = Colors.get(-1, 225, 115, -1);
+				waterColor = Colors.get(new int[] {-1, 226, 116, -1, -1, -1});
 			}
 			screen.render(xOffset, yOffset + 3, 26*32, waterColor, 0x00, 1);
 			screen.render(xOffset + 8, yOffset + 3, 26*32, waterColor, 0x01, 1);
@@ -98,6 +98,6 @@ public class Player extends Mob {
 			screen.render(xOffset + modifier - (modifier * flipBottom), yOffset + modifier, (xTile + 1) + (yTile + 1) * 32, color, flipBottom, scale); // lower body part 2
 		}
 		if(name != null)
-			Font.render(name, screen, xOffset - ((7 - name.length()%2) * (name.length() - 1) / 2), yOffset - 10, Colors.get(-1, -1, -1, 555), 1);
+			Font.render(name, screen, xOffset - ((7 - name.length()%2) * (name.length() - 1) / 2), yOffset - 10, Colors.get(new int[] {-1, -1, -1, -1, -1, 888}), 1);
 	}
 }

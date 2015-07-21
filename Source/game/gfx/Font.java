@@ -13,7 +13,7 @@ public class Font {
 
 	private static String chars = "abcdefghijklmnopqrstuvwxyz      " + "ABCDEFGHIJKLMNOPQRSTUVWXYZ      " +  "0123456789.,:;'\"!?$%()-=+/     ";
 
-	public static void render(String msg, Screen screen, int x, int y, int color, int scale) {
+	public static void render(String msg, Screen screen, int x, int y, int[] color, int scale) {
 		int i = 0;
 		for(char c : msg.toCharArray()) {
 			int charIndex = chars.indexOf(c);

@@ -6,6 +6,8 @@
 
 package game.gfx;
 
+import protolobe.LoBEmain;
+
 /**
  * Created by Christopher on 7/3/2015.
  */
@@ -13,7 +15,8 @@ public class Screen {
 
 	public static final int MAP_WIDTH = 64;
 	public static final int MAP_WIDTH_MASK = MAP_WIDTH - 1;
-
+	public static final int TRANSPARENT = LoBEmain.TRANSPARENT;
+	public static final int COL_CON = LoBEmain.COL_CONT;
 	public static final byte BIT_MIRROR_X = 0x01;
 	public static final byte BIT_MIRROR_Y = 0x02;
 
@@ -25,13 +28,13 @@ public class Screen {
 	public int width;
 	public int height;
 
+
 	public SpriteSheet sheet;
 
 	public Screen(int width, int height, SpriteSheet sheet) {
 		this.width = width;
 		this.height = height;
 		this.sheet = sheet;
-
 		pixels = new int[width * height];
 
 	}
@@ -41,11 +44,7 @@ public class Screen {
 		this.yOffset = yOffset;
 	}
 
-	public void render(int xPos, int yPos, int tile, int color) {
-		render(xPos, yPos, tile, color, 0x00, 1);
-	}
-
-	public void render(int xPos, int yPos, int tile, int inColor, int mirrorDir, int scale) {
+	public void render(int xPos, int yPos, int tile, int[] inColor, int mirrorDir, int scale) {
 		xPos -= xOffset;
 		yPos -= yOffset;
 
@@ -67,8 +66,8 @@ public class Screen {
 				if ( mirrorX )
 					xSheet = 7 - x;
 				int xPixel = x + xPos + (x * scaleMap) - ((scaleMap << 3) / 2);
-				int color = (inColor >> (sheet.pixels[xSheet + ySheet * sheet.width + tileOffset] * 8)) & 255;
-				if ( color < 255 ) {
+				int color = (inColor[sheet.pixels[xSheet + ySheet * sheet.width + tileOffset]]) & TRANSPARENT;
+				if ( color < TRANSPARENT ) {
 					for ( int yScale = 0; yScale < scale; ++yScale ) {
 						if ( yPixel + yScale >= 0 && yPixel + yScale < height ) {
 							for ( int xScale = 0; xScale < scale; ++xScale ) {

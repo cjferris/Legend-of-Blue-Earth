@@ -21,23 +21,31 @@ import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferInt;
 
+import static java.lang.Math.ceil;
+import static java.lang.Math.log;
+import static java.lang.Math.pow;
+
 public class LoBEmain extends Canvas implements Runnable {
 
 	private static final long serialVersionUID = 1L;
-
+	public static final int NUM_RGB = 10;
 	public static final int NUM_C = 6;
 	public static final int WIDTH = 240;
 	public static final int HEIGHT = WIDTH/12*9;
 	public static final int SCALE = 3;
 	public static final String NAME = "Legend of Blue Earth";
+	public static final Dimension DIMENSIONS = new Dimension(WIDTH*SCALE, HEIGHT*SCALE);
+	public static final int COL_CONT = (int)ceil(log(pow((double)NUM_RGB, 3.0D)) / log(2.0D));
+	public static final int TRANSPARENT = (int)pow(2D, (double)COL_CONT)-1;
 
 	private JFrame frame;
 	public boolean running = false;
 	public int tickCount = 0;
 	private BufferedImage image = new BufferedImage(WIDTH, HEIGHT, BufferedImage.TYPE_INT_RGB);
 	private int [] pixels = ((DataBufferInt) image.getRaster().getDataBuffer()).getData();
-	private int [] colors = new int[NUM_C*NUM_C*NUM_C];
+	private int [] colors = new int[NUM_RGB*NUM_RGB*NUM_RGB];
 
+	public static LoBEmain loBEmain;
 	private Screen screen;
 	public InputHandler input;
 	public Colors sColors;
@@ -45,9 +53,9 @@ public class LoBEmain extends Canvas implements Runnable {
 	public Player player;
 
 	public LoBEmain () {
-		setPreferredSize(new Dimension(WIDTH * SCALE, HEIGHT * SCALE));
-		setMinimumSize(new Dimension(WIDTH * SCALE, HEIGHT * SCALE));
-		setMaximumSize(new Dimension(WIDTH * SCALE, HEIGHT * SCALE));
+		setPreferredSize(DIMENSIONS);
+		setMinimumSize(DIMENSIONS);
+		setMaximumSize(DIMENSIONS);
 
 		frame = new JFrame(NAME);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -61,22 +69,23 @@ public class LoBEmain extends Canvas implements Runnable {
 	}
 
 	public void init() {
+		loBEmain = this;
 		int index = 0;
-		for(int r=0; r<NUM_C; ++r) {
-			for(int g=0; g<NUM_C; ++g) {
-				for(int b=0; b<NUM_C; ++b) {
-					int red = r*255/(NUM_C-1);
-					int green = g*255/(NUM_C-1);
-					int blue = b*255/(NUM_C-1);
+		for(int r=0; r<NUM_RGB; ++r) {
+			for(int g=0; g<NUM_RGB; ++g) {
+				for(int b=0; b<NUM_RGB; ++b) {
+					int red = r*255/(NUM_RGB-1);
+					int green = g*255/(NUM_RGB-1);
+					int blue = b*255/(NUM_RGB-1);
 					colors[index++] = red<<16 | green<<8 | blue;
 				}
 			}
 		}
 
-		sColors = new Colors(NUM_C);
-		screen = new Screen(WIDTH, HEIGHT, new SpriteSheet("/sprite_sheet2.png"));
+		sColors = new Colors();
+		screen = new Screen(WIDTH, HEIGHT, new SpriteSheet("/SpriteSheet.png", NUM_C));
 		input = new InputHandler(this);
-		level = new Level("/levels/waterTestLevel.png");
+		level = new Level("/levels/waterTestLevel.png"/*null*/);
 		player = new Player(level, 50, 100, input, JOptionPane.showInputDialog(this, "Please enter a character name: "));
 		level.addEntity(player);
 	}
@@ -166,21 +175,12 @@ public class LoBEmain extends Canvas implements Runnable {
 		int yOffset = player.y - screen.height/2;
 
 		level.renderTiles(screen, xOffset, yOffset);
-
-/*		for (int x = 0; x < level.width; ++x) {
-			int color = Colors.get(-1, -1, -1, 000);
-			if (x % 10 == 0 && x != 0) {
-				color = Colors.get(-1, -1, -1, 500);
-			}
-			Font.render((x % 10) + "", screen, 0 + (x * 8), 0, color, 1);
-		}*/
-
 		level.renderEntities(screen);
 
 		for(int y=0; y<screen.height; ++y) {
 			for(int x=0; x<screen.width; ++x) {
 				int colorCode = screen.pixels[x + y*screen.width];
-				if(colorCode<255) pixels[x + y*WIDTH] = colors[colorCode];
+				if(colorCode<TRANSPARENT) pixels[x + y*WIDTH] = colors[colorCode];
 			}
 		}
 
