@@ -13,34 +13,59 @@ import protolobe.LoBEmain;
  */
 public class Colors {
 
-	public static int FRed = (LoBEmain.NUM_RGB-1)*100;
-	public static int FGreen = (LoBEmain.NUM_RGB-1)*10;
-	public static int FBlue = LoBEmain.NUM_RGB-1;
-	public static int White = FRed + FGreen + FBlue;
-	public static int LSkin = FRed + FGreen-10 + FBlue-2;
-	public static int FPurple = FRed + FBlue;
-	public static int FYellow = FRed + FGreen;
-	public static int FCyan = FBlue + FGreen;
-	public static int HRed = ((LoBEmain.NUM_RGB-1)/2)*100;
-	public static int HGreen = ((LoBEmain.NUM_RGB-1)/2)*10;
-	public static int HBlue = FBlue/2;
-	public static int HGray = HRed + HGreen + HBlue;
-	public static int MSkin = HRed + HGreen-10 + HBlue-2;
-	public static int HPurple = HRed + HBlue;
-	public static int HYellow = HRed + HGreen;
-	public static int HCyan = HBlue + HGreen;
-	public static int DRed = ((LoBEmain.NUM_RGB-1)/4)*100;
-	public static int DGreen = ((LoBEmain.NUM_RGB-1)/4)*10;
-	public static int DBlue = HBlue/2;
-	public static int DGray = DRed + DGreen + DBlue;
-	public static int DSkin = DRed + DGreen-10 + DBlue-2;
-	public static int DPurple = DRed + DBlue;
-	public static int DYellow = DRed + DGreen;
-	public static int DCyan = DGreen + DBlue;
+	public static final int FRed = (LoBEmain.NUM_RGB-1)*LoBEmain.RGB_SHIFT*LoBEmain.RGB_SHIFT;
+	public static final int FGreen = (LoBEmain.NUM_RGB-1)*LoBEmain.RGB_SHIFT;
+	public static final int FBlue = LoBEmain.NUM_RGB-1;
+	public static final int White = FRed + FGreen + FBlue;
+	public static final int FPink = FRed + FBlue;
+	public static final int FYellow = FRed + FGreen;
+	public static final int FCyan = FBlue + FGreen;
+	public static final int Red1 = ((LoBEmain.NUM_RGB-1)*7/8)*LoBEmain.RGB_SHIFT*LoBEmain.RGB_SHIFT;
+	public static final int Green1 = ((LoBEmain.NUM_RGB-1)*7/8)*LoBEmain.RGB_SHIFT;
+	public static final int Blue1 = FBlue*7/8;
+	public static final int Gray1 = Red1 + Green1 + Blue1;
+	public static final int Red2 = ((LoBEmain.NUM_RGB-1)*3/4)*LoBEmain.RGB_SHIFT*LoBEmain.RGB_SHIFT;
+	public static final int Green2 = ((LoBEmain.NUM_RGB-1)*3/4)*LoBEmain.RGB_SHIFT;
+	public static final int Blue2 = FBlue*3/4;
+	public static final int Gray2 = Red2 + Green2 + Blue2;
+	public static final int Red3 = ((LoBEmain.NUM_RGB-1)*5/8)*LoBEmain.RGB_SHIFT*LoBEmain.RGB_SHIFT;
+	public static final int Green3 = ((LoBEmain.NUM_RGB-1)*5/8)*LoBEmain.RGB_SHIFT;
+	public static final int Blue3 = FBlue*5/8;
+	public static final int Gray3 = Red3 + Green3 + Blue3;
+	public static final int Red4 = ((LoBEmain.NUM_RGB-1)/2)*LoBEmain.RGB_SHIFT*LoBEmain.RGB_SHIFT;
+	public static final int Green4 = ((LoBEmain.NUM_RGB-1)/2)*LoBEmain.RGB_SHIFT;
+	public static final int Blue4 = FBlue/2;
+	public static final int Gray4 = Red4 + Green4 + Blue4;
+	public static final int Purple = Red4 + Blue4;
+	public static final int HYellow = Red4 + Green4;
+	public static final int HCyan = Blue4 + Green4;
+	public static final int Orange = FRed + Green4;
+	public static final int Red5 = ((LoBEmain.NUM_RGB-1)*3/8)*LoBEmain.RGB_SHIFT*LoBEmain.RGB_SHIFT;
+	public static final int Green5 = ((LoBEmain.NUM_RGB-1)*3/8)*LoBEmain.RGB_SHIFT;
+	public static final int Blue5 = FBlue*3/8;
+	public static final int Gray5 = Red5 + Green5 + Blue5;
+	public static final int Red6 = ((LoBEmain.NUM_RGB-1)/4)*LoBEmain.RGB_SHIFT*LoBEmain.RGB_SHIFT;
+	public static final int Green6 = ((LoBEmain.NUM_RGB-1)/4)*LoBEmain.RGB_SHIFT;
+	public static final int Blue6 = Blue4/2;
+	public static final int Gray6 = Red6 + Green6 + Blue6;
+	public static final int Purple6 = Red6 + Blue6;
+	public static final int Yellow6 = Red6 + Green6;
+	public static final int Cyan6 = Green6 + Blue6;
+	public static final int Red7 = ((LoBEmain.NUM_RGB-1)/8)*LoBEmain.RGB_SHIFT*LoBEmain.RGB_SHIFT;
+	public static final int Green7 = ((LoBEmain.NUM_RGB-1)/8)*LoBEmain.RGB_SHIFT;
+	public static final int Blue7 = Blue6/2;
+	public static final int Yellow7 = Red7 + Green7;
+	public static final int Gray7 = Red7 + Green7 + Blue7;
+	public static final int Cyan7 = Green7 + Blue7;
+	public static final int Purple7 = Red7 + Blue7;
+	public static final int LSkin = White - Cyan7 - Blue7;
+	public static final int MSkin = Gray4 - Cyan7 - Blue7;
+	public static final int DSkin = Gray6 - Cyan7 - Blue7;
 
-	private static int numRGB = LoBEmain.NUM_RGB;
-	private static int numColors = LoBEmain.NUM_C;
-	private static int transparent = LoBEmain.TRANSPARENT;
+	private static final int numRGB = LoBEmain.NUM_RGB;
+	private static final int numColors = LoBEmain.NUM_C;
+	private static final int RGBShift = LoBEmain.RGB_SHIFT;
+	private static final int transparent = LoBEmain.TRANSPARENT;
 
 	public Colors() {
 
@@ -56,9 +81,9 @@ public class Colors {
 
 	private static int get(int color) {
 		if(color<0) return transparent;
-		int red = color/100%10;
-		int green = color/10%10;
-		int blue = color%10;
+		int red = color/(RGBShift*RGBShift);
+		int green = color/RGBShift%RGBShift;
+		int blue = color%RGBShift;
 		return red*numRGB*numRGB + green*numRGB + blue;
 	}
 }

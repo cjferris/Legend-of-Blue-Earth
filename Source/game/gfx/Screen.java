@@ -17,6 +17,9 @@ public class Screen {
 	public static final int MAP_WIDTH_MASK = MAP_WIDTH - 1;
 	public static final int TRANSPARENT = LoBEmain.TRANSPARENT;
 	public static final int COL_CON = LoBEmain.COL_CONT;
+	public static final int SHIFT = LoBEmain.TILE_SHIFT;
+	public static final int TILES_PER_ROW = LoBEmain.TILES_PER_ROW;
+	public static final int TILE_SIZE = LoBEmain.TILE_SIZE;
 	public static final byte BIT_MIRROR_X = 0x01;
 	public static final byte BIT_MIRROR_Y = 0x02;
 
@@ -52,20 +55,20 @@ public class Screen {
 		boolean mirrorY = (mirrorDir & BIT_MIRROR_Y) > 0;
 
 		int scaleMap = scale - 1;
-		int xTile = tile % 32;
-		int yTile = tile / 32;
-		int tileOffset = (xTile << 3) + (yTile << 3) * sheet.width;
+		int xTile = tile % TILES_PER_ROW;
+		int yTile = tile / TILES_PER_ROW;
+		int tileOffset = (xTile << SHIFT) + (yTile << SHIFT) * sheet.width;
 
-		for ( int y = 0; y < 8; ++y ) {
+		for ( int y = 0; y < TILE_SIZE; ++y ) {
 			int ySheet = y;
 			if ( mirrorY )
-				ySheet = 7 - y;
-			int yPixel = y + yPos + (y * scaleMap) - ((scaleMap << 3) / 2);
-			for ( int x = 0; x < 8; ++x ) {
+				ySheet = TILE_SIZE - 1 - y;
+			int yPixel = y + yPos + (y * scaleMap) - ((scaleMap << SHIFT) / 2);
+			for ( int x = 0; x < TILE_SIZE; ++x ) {
 				int xSheet = x;
 				if ( mirrorX )
-					xSheet = 7 - x;
-				int xPixel = x + xPos + (x * scaleMap) - ((scaleMap << 3) / 2);
+					xSheet = TILE_SIZE - 1 - x;
+				int xPixel = x + xPos + (x * scaleMap) - ((scaleMap << SHIFT) / 2);
 				int color = (inColor[sheet.pixels[xSheet + ySheet * sheet.width + tileOffset]]) & TRANSPARENT;
 				if ( color < TRANSPARENT ) {
 					for ( int yScale = 0; yScale < scale; ++yScale ) {

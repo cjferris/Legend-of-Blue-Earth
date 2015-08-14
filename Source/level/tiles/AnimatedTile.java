@@ -6,6 +6,8 @@
 
 package level.tiles;
 
+import protolobe.LoBEmain;
+
 /**
  * Created by Christopher on 7/12/2015.
  */
@@ -29,7 +31,7 @@ public class AnimatedTile extends BasicTile{
 		if((System.currentTimeMillis() - lastIterationTime) >= animationDelay) {
 			lastIterationTime = System.currentTimeMillis();
 			currentAnimationIndex = (currentAnimationIndex + 1) % animationTileCoordinates.length;
-			this.tileId = animationTileCoordinates[currentAnimationIndex][0] + animationTileCoordinates[currentAnimationIndex][1]*32;
+			this.tileId = animationTileCoordinates[currentAnimationIndex][0] + animationTileCoordinates[currentAnimationIndex][1]* LoBEmain.TILES_PER_ROW;
 		}
 	}
 }

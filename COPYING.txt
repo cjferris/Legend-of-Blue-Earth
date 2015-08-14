@@ -1,0 +1,18 @@
+/*
+ * Copyright (c) 2015. Chris Ferris
+ *  This file is licensed under the "GPL V2" license.
+ *  Refer to LICENSE for distribution details.
+ */
+
+Welcome to the prototype of Legend of Blue Earth.
+
+As mentioned in the LICENSE file, you may use and modify this code,
+but I ask that you keep the copyright and ensure that the GPL license
+propigates through all of your code that contains any of the Legends
+of Blue Earth code.
+
+To use and play Legend of Blue Earth, you just have to clone the
+repository into a standardized Java compiler which has been updated
+to Java 8, then compile and run the code.
+
+If you have any questions, please email me at cjferris@pdx.edu

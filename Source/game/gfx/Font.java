@@ -6,12 +6,14 @@
 
 package game.gfx;
 
+import protolobe.LoBEmain;
+
 /**
  * Created by Christopher on 7/3/2015.
  */
 public class Font {
 
-	private static String chars = "abcdefghijklmnopqrstuvwxyz      " + "ABCDEFGHIJKLMNOPQRSTUVWXYZ      " +  "0123456789.,:;'\"!?$%()-=+/     ";
+	private static String chars = "?;:'\"[]~        " + "!@#$%^&*()-=+/,.wxyz1234567890  " + "ghijklmnopqrstuvQRSTUVWXYZabcdefABCDEFGHIJKLMNOP";
 
 	public static void render(String msg, Screen screen, int x, int y, int[] color, int scale) {
 		int i = 0;
@@ -23,12 +25,16 @@ public class Font {
 				case 'p':
 				case 'q':
 				case 'y':
-					y += 3;
-					screen.render(x + (8*i++), y, charIndex + 29 * 32, color, 0x00, scale);
-					y -= 3;
+				case ',':
+				case '~':
+				case '*':
+				case ';':
+					y += 6;
+					screen.render(x + (12*i++), y, charIndex + 10 * LoBEmain.TILES_PER_ROW, color, 0x00, scale);
+					y -= 6;
 					break;
 				default:
-					screen.render(x + (8*i++), y, charIndex + 29 * 32, color, 0x00, scale);
+					screen.render(x + (12*i++), y, charIndex + 10 * LoBEmain.TILES_PER_ROW, color, 0x00, scale);
 					break;
 			}
 		}

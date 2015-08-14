@@ -11,7 +11,7 @@ package level.tiles;
  */
 
 import game.gfx.Screen;
-import level.Level;
+import protolobe.LoBEmain;
 
 public class BasicTile extends Tile {
 
@@ -20,11 +20,11 @@ public class BasicTile extends Tile {
 
 	public BasicTile(int id, int x, int y, int[] tileColor, int levelColor) {
 		super(id, false, false, levelColor);
-		this.tileId = x + y;
+		this.tileId = x + y* LoBEmain.TILES_PER_ROW;
 		this.tileColor = tileColor;
 	}
 
-	public void render(Screen screen, Level level, int x, int y) {
+	public void render(Screen screen, int x, int y) {
 		screen.render(x, y, tileId, tileColor, 0x00, 1);
 	}
 
